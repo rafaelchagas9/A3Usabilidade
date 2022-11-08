@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "769341373683",
+    "project_id": "a3usabilidade",
+    "storage_bucket": "a3usabilidade.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:769341373683:android:ce7795802877cf9bd8cb86",
+        "android_client_info": {
+          "package_name": "com.example.olimpiadas"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "769341373683-ldaraf3l746hvajcffiaccjnrvvdhj6a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTvrCY_dl-u9cAXzqJMz0N25LzCfSaRGY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "769341373683-ldaraf3l746hvajcffiaccjnrvvdhj6a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

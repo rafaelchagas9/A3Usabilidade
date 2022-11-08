@@ -1,37 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:olimpiadas/screens/Auth/register_screen.dart';
+import 'package:olimpiadas/screens/Auth/login_screen.dart';
 import 'package:olimpiadas/utilities/constants.dart';
 
 import '../../auth.dart';
-import '../homepage/home.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   bool? _rememberMe = false;
   String? _email;
   String? _password;
-
-  login() {
-    bool success = false;
-    Future<bool> response = Auth().login(_email, _password);
-    response.then((value) => success = value);
-    if (success == false) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Usuário ou senha incorretos")));
-    } else {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const HomePage(),
-          ));
-    }
-  }
 
   Widget _buildEmailField() {
     return Column(
@@ -106,6 +89,43 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  Widget _buildConfirmPasswordField() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        const Text(
+          "Confirmar Senha",
+          style: kLabelStyle,
+        ),
+        const SizedBox(height: 10.0),
+        Container(
+          alignment: Alignment.centerLeft,
+          decoration: kBoxDecorationStyle,
+          height: 50.0,
+          child: TextField(
+            textAlignVertical: TextAlignVertical.center,
+            obscureText: true,
+            keyboardType: TextInputType.emailAddress,
+            style: const TextStyle(color: Colors.white, fontFamily: 'OpenSans'),
+            decoration: const InputDecoration(
+                border: InputBorder.none,
+                prefixIcon: Icon(
+                  Icons.lock,
+                  color: Colors.white,
+                ),
+                hintText: "Confirme a senha",
+                hintStyle: kHintTextStyle),
+            onChanged: (value) {
+              setState(() {
+                _password = value;
+              });
+            },
+          ),
+        )
+      ],
+    );
+  }
+
   Widget _buildSocialBtn(VoidCallback onTap, AssetImage logo) {
     return GestureDetector(
       onTap: onTap,
@@ -161,7 +181,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 const EdgeInsets.symmetric(horizontal: 40.0, vertical: 120.0),
             child: Column(children: <Widget>[
               const Text(
-                "Entrar",
+                "Registrar",
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 30.0,
@@ -171,27 +191,8 @@ class _LoginScreenState extends State<LoginScreen> {
               _buildEmailField(),
               const SizedBox(height: 30.0),
               _buildPasswordField(),
-              Container(
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  onPressed: () => print("TODO"),
-                  style: kTextBtnStyle,
-                  child: const Text("Esqueceu a senha?"),
-                ),
-              ),
-              Row(children: [
-                Checkbox(
-                  value: _rememberMe,
-                  checkColor: Colors.green,
-                  activeColor: Colors.white,
-                  onChanged: (value) {
-                    setState(() {
-                      _rememberMe = value;
-                    });
-                  },
-                ),
-                const Text("Lembrar usuário", style: kLabelStyle)
-              ]),
+              const SizedBox(height: 30.0),
+              _buildConfirmPasswordField(),
               Container(
                 padding: const EdgeInsets.symmetric(vertical: 25.0),
                 width: double.infinity,
@@ -203,9 +204,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     backgroundColor: Colors.white,
                     padding: const EdgeInsets.all(15.0),
                   ),
-                  onPressed: () => login(),
+                  onPressed: () => Auth().register(_email, _password),
                   child: const Text(
-                    "Entrar",
+                    "Registrar",
                     style: TextStyle(
                         letterSpacing: 1.5,
                         fontSize: 18.0,
@@ -223,7 +224,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         fontFamily: 'OpenSans',
                       )),
                   SizedBox(height: 20),
-                  Text("Entrar com", style: kLabelStyle)
+                  Text("Registrar com", style: kLabelStyle)
                 ],
               ),
               Padding(
@@ -238,24 +239,21 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
               ),
+              SizedBox(height: 20.0),
               GestureDetector(
-                onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const RegisterScreen(),
-                    )),
+                onTap: () => Navigator.pop(context),
                 child: RichText(
                   text: const TextSpan(
                     children: <TextSpan>[
                       TextSpan(
-                        text: "Ainda não tem uma conta? ",
+                        text: "Já tem uma conta? ",
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 18.0,
                             fontWeight: FontWeight.w400),
                       ),
                       TextSpan(
-                        text: "Registrar",
+                        text: "Entrar",
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 18.0,
