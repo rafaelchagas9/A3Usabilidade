@@ -37,11 +37,12 @@ class HomePage extends StatelessWidget {
       bottomNavigationBar: GNav(
         gap: 10.0,
         tabActiveBorder: Border.all(color: Colors.black, width: 1),
+        backgroundColor: Colors.white,
         iconSize: 30, // tab button icon size
         duration: Duration(milliseconds: 400), // tab animation duration
         haptic: false,
-        padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
-        tabMargin: EdgeInsets.only(bottom: 10),
+        padding: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
+        tabMargin: EdgeInsets.only(bottom: 10, top: 10, left: 10),
         tabs: [
           GButton(
             icon: Icons.home,
