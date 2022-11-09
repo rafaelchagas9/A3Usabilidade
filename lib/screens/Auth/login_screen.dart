@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:olimpiadas/screens/Auth/register_screen.dart';
 import 'package:olimpiadas/utilities/constants.dart';
+import 'package:olimpiadas/utilities/custom_icons_icons.dart';
 
 import '../../auth.dart';
 import '../homepage/home.dart';
@@ -14,22 +15,34 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool? _rememberMe = false;
-  String? _email;
-  String? _password;
+  bool _hidePassword = true;
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
 
   login() {
-    bool success = false;
-    Future<bool> response = Auth().login(_email, _password);
-    response.then((value) => success = value);
-    if (success == false) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Usuário ou senha incorretos")));
+    if (emailController.text.isEmpty) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Preencha o email")));
+    } else if (passwordController.text.isEmpty) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Preencha a senha")));
     } else {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const HomePage(),
-          ));
+      bool success = false;
+      Future<bool> response =
+          Auth().login(emailController.text, passwordController.text);
+      response.then((value) {
+        success = value;
+        if (success == false) {
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text("Usuário ou senha incorretos")));
+        } else {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const HomePage(),
+              ));
+        }
+      });
     }
   }
 
@@ -47,6 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
           decoration: kBoxDecorationStyle,
           height: 60.0,
           child: TextField(
+            controller: emailController,
             textAlignVertical: TextAlignVertical.center,
             keyboardType: TextInputType.emailAddress,
             style: const TextStyle(color: Colors.white),
@@ -58,11 +72,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 hintText: "Digite seu email",
                 hintStyle: kHintTextStyle),
-            onChanged: (value) {
-              setState(() {
-                _email = value;
-              });
-            },
           ),
         )
       ],
@@ -83,23 +92,40 @@ class _LoginScreenState extends State<LoginScreen> {
           decoration: kBoxDecorationStyle,
           height: 50.0,
           child: TextField(
+            controller: passwordController,
             textAlignVertical: TextAlignVertical.center,
-            obscureText: true,
+            obscureText: _hidePassword,
             keyboardType: TextInputType.emailAddress,
             style: const TextStyle(color: Colors.white, fontFamily: 'OpenSans'),
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
                 border: InputBorder.none,
-                prefixIcon: Icon(
+                prefixIcon: const Icon(
                   Icons.lock,
                   color: Colors.white,
                 ),
+                suffixIcon: OutlinedButton(
+                  style: ButtonStyle(
+                    side: MaterialStateProperty.resolveWith(((states) {
+                      if (states.contains(MaterialState.pressed)) {
+                      } else {
+                        return BorderSide(color: Colors.white.withOpacity(0));
+                      }
+                    })),
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _hidePassword = !_hidePassword;
+                    });
+                  },
+                  child: _hidePassword
+                      ? const Icon(
+                          CustomIcons.eye,
+                          color: Colors.white70,
+                        )
+                      : const Icon(CustomIcons.eye_slash),
+                ),
                 hintText: "Digite sua senha",
                 hintStyle: kHintTextStyle),
-            onChanged: (value) {
-              setState(() {
-                _password = value;
-              });
-            },
           ),
         )
       ],
@@ -212,30 +238,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         fontWeight: FontWeight.bold,
                         fontFamily: 'OpenSans'),
                   ),
-                ),
-              ),
-              Column(
-                children: const [
-                  Text("- OU -",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w400,
-                        fontFamily: 'OpenSans',
-                      )),
-                  SizedBox(height: 20),
-                  Text("Entrar com", style: kLabelStyle)
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 30.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _buildSocialBtn(() => print("Facebook"),
-                        AssetImage('assets/logos/facebook.jpg')),
-                    _buildSocialBtn(() => print("google"),
-                        AssetImage('assets/logos/google.jpg'))
-                  ],
                 ),
               ),
               GestureDetector(

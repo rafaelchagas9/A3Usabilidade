@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:olimpiadas/screens/Auth/login_screen.dart';
 import 'package:olimpiadas/screens/homepage/favoritesScreen.dart';
 import 'package:olimpiadas/screens/homepage/homeScreen.dart';
 import 'package:olimpiadas/screens/homepage/profileScreen.dart';
 import 'package:olimpiadas/screens/homepage/settingsScreen.dart';
-
-import '../../auth.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -17,7 +16,8 @@ class HomePage extends StatelessWidget {
       HomeScreen(),
       FavoriteScreen(),
       ProfileScreen(),
-      SettingsScreen()
+      SettingsScreen(),
+      LoginScreen()
     ];
 
     void onPageChanged(int index) {}
@@ -51,14 +51,14 @@ class HomePage extends StatelessWidget {
             curve: Curves.easeOutExpo, // tab animation curves
             onPressed: () => onItemTapped(0),
           ),
-          GButton(
-            icon: Icons.favorite,
-            text: "Favoritos",
-            rippleColor:
-                Colors.grey[800], // tab button ripple color when pressed
-            hoverColor: Colors.grey[700], // tab button hover color
-            onPressed: () => onItemTapped(1),
-          ),
+          //GButton(
+          //  icon: Icons.favorite,
+          //  text: "Favoritos",
+          //  rippleColor:
+          //      Colors.grey[800], // tab button ripple color when pressed
+          //  hoverColor: Colors.grey[700], // tab button hover color
+          //  onPressed: () => onItemTapped(1),
+          //),
           GButton(
             icon: Icons.person,
             text: "Perfil",

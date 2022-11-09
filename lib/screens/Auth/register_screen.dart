@@ -1,6 +1,11 @@
+import 'dart:io';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:olimpiadas/screens/Auth/login_screen.dart';
 import 'package:olimpiadas/utilities/constants.dart';
+import 'package:olimpiadas/utilities/custom_icons_icons.dart';
 
 import '../../auth.dart';
 
@@ -12,9 +17,25 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  bool? _rememberMe = false;
-  String? _email;
-  String? _password;
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
+  final nameController = TextEditingController();
+  File? profilePicture;
+
+  bool _hidePassword = true;
+  bool _hideConfirmPassword = true;
+
+  Future _pickImage() async {
+    final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    if (image == null) return;
+
+    final imageTemporary = File(image.path);
+    setState(() {
+      profilePicture = imageTemporary;
+    });
+  }
 
   Widget _buildEmailField() {
     return Column(
@@ -28,8 +49,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
         Container(
           alignment: Alignment.centerLeft,
           decoration: kBoxDecorationStyle,
-          height: 60.0,
+          height: 50.0,
           child: TextField(
+            controller: emailController,
             textAlignVertical: TextAlignVertical.center,
             keyboardType: TextInputType.emailAddress,
             style: const TextStyle(color: Colors.white),
@@ -41,11 +63,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 hintText: "Digite seu email",
                 hintStyle: kHintTextStyle),
-            onChanged: (value) {
-              setState(() {
-                _email = value;
-              });
-            },
           ),
         )
       ],
@@ -66,23 +83,40 @@ class _RegisterScreenState extends State<RegisterScreen> {
           decoration: kBoxDecorationStyle,
           height: 50.0,
           child: TextField(
+            controller: passwordController,
             textAlignVertical: TextAlignVertical.center,
-            obscureText: true,
+            obscureText: _hidePassword,
             keyboardType: TextInputType.emailAddress,
             style: const TextStyle(color: Colors.white, fontFamily: 'OpenSans'),
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
                 border: InputBorder.none,
-                prefixIcon: Icon(
+                prefixIcon: const Icon(
                   Icons.lock,
                   color: Colors.white,
                 ),
+                suffixIcon: OutlinedButton(
+                  style: ButtonStyle(
+                    side: MaterialStateProperty.resolveWith(((states) {
+                      if (states.contains(MaterialState.pressed)) {
+                      } else {
+                        return BorderSide(color: Colors.white.withOpacity(0));
+                      }
+                    })),
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _hidePassword = !_hidePassword;
+                    });
+                  },
+                  child: _hidePassword
+                      ? const Icon(
+                          CustomIcons.eye,
+                          color: Colors.white70,
+                        )
+                      : const Icon(CustomIcons.eye_slash),
+                ),
                 hintText: "Digite sua senha",
                 hintStyle: kHintTextStyle),
-            onChanged: (value) {
-              setState(() {
-                _password = value;
-              });
-            },
           ),
         )
       ],
@@ -103,23 +137,94 @@ class _RegisterScreenState extends State<RegisterScreen> {
           decoration: kBoxDecorationStyle,
           height: 50.0,
           child: TextField(
+            controller: confirmPasswordController,
             textAlignVertical: TextAlignVertical.center,
-            obscureText: true,
+            obscureText: _hideConfirmPassword,
             keyboardType: TextInputType.emailAddress,
+            style: const TextStyle(color: Colors.white, fontFamily: 'OpenSans'),
+            decoration: InputDecoration(
+                border: InputBorder.none,
+                prefixIcon: const Icon(
+                  Icons.lock,
+                  color: Colors.white,
+                ),
+                suffixIcon: OutlinedButton(
+                  style: ButtonStyle(
+                    side: MaterialStateProperty.resolveWith(((states) {
+                      if (states.contains(MaterialState.pressed)) {
+                      } else {
+                        return BorderSide(color: Colors.white.withOpacity(0));
+                      }
+                    })),
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _hideConfirmPassword = !_hideConfirmPassword;
+                    });
+                  },
+                  child: _hideConfirmPassword
+                      ? const Icon(
+                          CustomIcons.eye,
+                          color: Colors.white70,
+                        )
+                      : const Icon(CustomIcons.eye_slash),
+                ),
+                hintText: "Confirme a senha",
+                hintStyle: kHintTextStyle),
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget _buildNameField() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        const Text(
+          "Nome",
+          style: kLabelStyle,
+        ),
+        const SizedBox(height: 10.0),
+        Container(
+          alignment: Alignment.centerLeft,
+          decoration: kBoxDecorationStyle,
+          height: 50.0,
+          child: TextField(
+            controller: nameController,
+            textAlignVertical: TextAlignVertical.center,
+            keyboardType: TextInputType.text,
             style: const TextStyle(color: Colors.white, fontFamily: 'OpenSans'),
             decoration: const InputDecoration(
                 border: InputBorder.none,
                 prefixIcon: Icon(
-                  Icons.lock,
+                  Icons.abc,
                   color: Colors.white,
                 ),
-                hintText: "Confirme a senha",
+                hintText: "Insira seu nome",
                 hintStyle: kHintTextStyle),
-            onChanged: (value) {
-              setState(() {
-                _password = value;
-              });
-            },
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget _buildPhotoField() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        SizedBox(
+          width: 150,
+          height: 150,
+          child: IconButton(
+            onPressed: () => _pickImage(),
+            icon: CircleAvatar(
+              radius: 100,
+              backgroundImage: profilePicture != null
+                  ? FileImage(profilePicture!) as ImageProvider
+                  : const CachedNetworkImageProvider(
+                      "https://cdn.onlinewebfonts.com/svg/img_329115.png"),
+            ),
           ),
         )
       ],
@@ -188,6 +293,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 30.0),
+              _buildPhotoField(),
+              const SizedBox(height: 30.0),
+              _buildNameField(),
+              const SizedBox(height: 30.0),
               _buildEmailField(),
               const SizedBox(height: 30.0),
               _buildPasswordField(),
@@ -204,7 +313,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     backgroundColor: Colors.white,
                     padding: const EdgeInsets.all(15.0),
                   ),
-                  onPressed: () => Auth().register(_email, _password),
+                  onPressed: () => Auth().register(
+                      nameController.text,
+                      emailController.text,
+                      passwordController.text,
+                      profilePicture),
                   child: const Text(
                     "Registrar",
                     style: TextStyle(
@@ -213,30 +326,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         fontWeight: FontWeight.bold,
                         fontFamily: 'OpenSans'),
                   ),
-                ),
-              ),
-              Column(
-                children: const [
-                  Text("- OU -",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w400,
-                        fontFamily: 'OpenSans',
-                      )),
-                  SizedBox(height: 20),
-                  Text("Registrar com", style: kLabelStyle)
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 30.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _buildSocialBtn(() => print("Facebook"),
-                        AssetImage('assets/logos/facebook.jpg')),
-                    _buildSocialBtn(() => print("google"),
-                        AssetImage('assets/logos/google.jpg'))
-                  ],
                 ),
               ),
               SizedBox(height: 20.0),

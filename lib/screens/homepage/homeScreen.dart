@@ -36,13 +36,31 @@ class HomeScreen extends StatelessWidget {
               itemCount: snapshot.data?.esportes?.length,
               itemBuilder: (context, index) {
                 return Container(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   child: Column(
                     children: [
                       Text(snapshot.data?.esportes![index].name as String),
-                      Image.network(
-                          snapshot.data?.esportes![index].imageUrl as String),
-                      SizedBox(
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Stack(
+                        children: [
+                          CachedNetworkImage(
+                            fit: BoxFit.fill,
+                            imageUrl: snapshot.data?.esportes![index].imageUrl
+                                as String,
+                          ),
+                          Positioned(
+                            right: 0,
+                            top: 0,
+                            child: IconButton(
+                              onPressed: (() {}),
+                              icon: const Icon(Icons.favorite_border_outlined),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
                         height: 10,
                       ),
                       Text(snapshot.data?.esportes![index].descricao as String)
