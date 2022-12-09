@@ -6,7 +6,6 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:olimpiadas/screens/Auth/login_screen.dart';
 import 'package:olimpiadas/screens/homepage/homeScreen.dart';
