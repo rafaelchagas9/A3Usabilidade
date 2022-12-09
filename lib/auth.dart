@@ -2,6 +2,16 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'dart:io';
+
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:olimpiadas/screens/Auth/login_screen.dart';
+import 'package:olimpiadas/screens/homepage/homeScreen.dart';
+import 'package:olimpiadas/utilities/constants.dart';
+import 'package:olimpiadas/utilities/custom_icons_icons.dart';
 
 class Auth {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -9,7 +19,7 @@ class Auth {
 
   User? get currentUser => _firebaseAuth.currentUser;
 
-  void register(String? name, String? emailAddress, String? password,
+  Future<void> register(String? name, String? emailAddress, String? password,
       File? profilePicture) async {
     if (emailAddress == null || password == null) {
       print("Vazio");
@@ -31,7 +41,7 @@ class Auth {
                       else
                         {value.user!.updatePhotoURL(profilePicture.path)},
                     },
-                  value.user!..updateDisplayName(name)
+                  value.user!..updateDisplayName(name),
                 });
       } on FirebaseAuthException catch (e) {
         if (e.code == 'weak-password') {

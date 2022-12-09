@@ -26,6 +26,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool _hidePassword = true;
   bool _hideConfirmPassword = true;
 
+  bool _screenUpdate = false;
+
   Future _pickImage() async {
     final image = await ImagePicker().pickImage(source: ImageSource.gallery);
 
@@ -313,11 +315,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     backgroundColor: Colors.white,
                     padding: const EdgeInsets.all(15.0),
                   ),
-                  onPressed: () => Auth().register(
-                      nameController.text,
-                      emailController.text,
-                      passwordController.text,
-                      profilePicture),
+                  onPressed: () => {
+                    Auth()
+                        .register(nameController.text, emailController.text,
+                            passwordController.text, profilePicture)
+                        .then((value) => Navigator.pop(context)),
+                  },
                   child: const Text(
                     "Registrar",
                     style: TextStyle(

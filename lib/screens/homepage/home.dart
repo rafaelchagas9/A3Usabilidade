@@ -66,13 +66,13 @@ class HomePage extends StatelessWidget {
                 Colors.grey[800], // tab button ripple color when pressed
             onPressed: () => onItemTapped(2),
           ),
-          GButton(
-            icon: Icons.settings,
-            text: "Configurações",
-            rippleColor:
-                Colors.grey[800], // tab button ripple color when pressed
-            onPressed: () => onItemTapped(3),
-          ),
+          //GButton(
+          //  icon: Icons.settings,
+          //  text: "Configurações",
+          //  rippleColor:
+          //      Colors.grey[800], // tab button ripple color when pressed
+          //  onPressed: () => onItemTapped(3),
+          //),
         ],
       ),
     );

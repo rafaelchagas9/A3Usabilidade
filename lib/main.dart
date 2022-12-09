@@ -13,6 +13,7 @@ Future<void> main() async {
 
   runApp(
     MaterialApp(
+      theme: ThemeData(brightness: Brightness.light),
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: StreamBuilder<User?>(
